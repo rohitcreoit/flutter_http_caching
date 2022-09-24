@@ -1,6 +1,6 @@
 name: flutter_http_caching
 description: Best way for caching http request
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/varunsat/flutter_http_caching
 
 environment:
