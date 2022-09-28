@@ -1,6 +1,6 @@
 name: flutter_http_caching
 description: A Flutter Plugin to Handle offline API Caching using Http package and Sqflite package
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/varunsat/flutter_http_caching
 
 environment:
