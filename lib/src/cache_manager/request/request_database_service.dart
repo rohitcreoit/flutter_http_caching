@@ -40,7 +40,7 @@ class RequestDBService implements RequestDBOperation {
 
   @override
   removeRequest({id}) async {
-    final rowsDeleted = await db.delete(id);
+    await db.delete(id);
   }
 
   @override
@@ -53,6 +53,6 @@ class RequestDBService implements RequestDBOperation {
 
   @override
   clearAllRequest() async {
-    final rowsDeleted = await db.deleteAll();
+    await db.deleteAll();
   }
 }

@@ -3,7 +3,6 @@ library flutter_http_caching;
 import 'package:flutter_http_caching/src/cache_manager/database_service.dart';
 import 'package:flutter_http_caching/src/login_interceptor/interceptor.dart';
 import 'package:http/http.dart';
-import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:http_interceptor/http/interceptor_contract.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 

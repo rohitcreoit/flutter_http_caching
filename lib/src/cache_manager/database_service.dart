@@ -38,17 +38,17 @@ class DBService implements DBOperation {
       DBHelper.requestId: "$requestId",
       DBHelper.url: "$url"
     };
-    final id = await db.insertResponse(row);
+    await db.insertResponse(row);
   }
 
   @override
   removeResponse({id}) async {
-    final rowsDeleted = await db.deleteResponse(id);
+    await db.deleteResponse(id);
   }
 
   @override
   clearAllResponse() async {
-    final rowsDeleted = await db.deleteAllResponse();
+    await db.deleteAllResponse();
   }
 
   @override
@@ -88,11 +88,11 @@ class DBService implements DBOperation {
 
   @override
   removeRequest({id}) async {
-    final rowsDeleted = await db.deleteRequest(id);
+    await db.deleteRequest(id);
   }
 
   @override
   clearAllRequest() async {
-    final rowsDeleted = await db.deleteAllResponse();
+    await db.deleteAllResponse();
   }
 }
