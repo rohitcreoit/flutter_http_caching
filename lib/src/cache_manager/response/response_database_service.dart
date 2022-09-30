@@ -30,12 +30,12 @@ class ResponseDBService implements ResponseDBOperation {
       ResponseDBHelper.requestId: "$requestId",
       ResponseDBHelper.url: "$url"
     };
-    final id = await db.insert(row);
+     await db.insert(row);
   }
 
   @override
   removeResponse({id}) async {
-    final rowsDeleted = await db.delete(id);
+   await db.delete(id);
   }
 
   @override
@@ -48,7 +48,7 @@ class ResponseDBService implements ResponseDBOperation {
 
   @override
   clearAllRespones() async {
-    final rowsDeleted = await db.deleteAll();
+     await db.deleteAll();
   }
 
   @override
@@ -62,9 +62,8 @@ class ResponseDBService implements ResponseDBOperation {
     String whereString = '${ResponseDBHelper.url} = ?';
     int rowId = 1;
     List<dynamic> whereArguments = [rowId];
-    List<Map> result = await db.querySingleRows(
+    await db.querySingleRows(
         column: columnsToSelect, where: whereString, whereArgs: whereArguments);
 
-    result.forEach((row) => print(row));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:http_interceptor/http_interceptor.dart';
 
 class ApiRequestData {
   ApiRequestData(
