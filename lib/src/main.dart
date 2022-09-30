@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_http_caching/flutter_http_caching.dart';
 
 void main() => runApp(_MainApp());
 
