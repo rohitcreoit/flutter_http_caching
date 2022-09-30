@@ -18,7 +18,7 @@ class LoggingInterceptor implements InterceptorContract {
 
   @override
   Future<ResponseData> interceptResponse({required ResponseData data}) async {
-    print("${data.statusCode} ${data.url}");
+
     if(data.statusCode == 401) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -37,14 +37,14 @@ class LoggingInterceptor implements InterceptorContract {
 
     } else {
       String log = object.toString();
-      int start = 0;
+
       int endIndex = defaultPrintLength;
       int logLength = log.length;
       int tmpLogLength = log.length;
       while (endIndex < logLength) {
 
         endIndex += defaultPrintLength;
-        start += defaultPrintLength;
+
         tmpLogLength -= defaultPrintLength;
       }
       if (tmpLogLength > 0) {
