@@ -1,12 +1,7 @@
 import 'database_helper.dart';
 
 abstract class DBOperation {
-  addResponse({
-    required String type,
-    url,
-    body,
-    requestId,
-  });
+  addResponse({required String type, url, body, requestId, header});
 
   removeResponse({var id});
 
@@ -30,13 +25,14 @@ class DBService implements DBOperation {
   final db = DBHelper.instance;
 
   @override
-  addResponse({required String type, url, body, requestId}) async {
+  addResponse({required String type, url, body, requestId, header}) async {
     // row to insert
     Map<String, dynamic> row = {
       DBHelper.type: type,
       DBHelper.response: '$body',
       DBHelper.requestId: "$requestId",
-      DBHelper.url: "$url"
+      DBHelper.url: "$url",
+      DBHelper.responseHeader: "$header"
     };
     await db.insertResponse(row);
   }
@@ -58,6 +54,7 @@ class DBService implements DBOperation {
       DBHelper.response,
       DBHelper.requestId,
       DBHelper.url,
+      DBHelper.responseHeader
     ];
     String whereString = '${DBHelper.url} = ?';
     List<dynamic> whereArguments = [url];

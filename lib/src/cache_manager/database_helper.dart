@@ -1,12 +1,13 @@
 import 'dart:io';
 
+import 'package:fimber/fimber.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DBHelper {
   static const _databaseName = "cache_manager.db";
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 2;
 
   static const responseTable = 'response';
   static const requestTable = 'request';
@@ -19,12 +20,18 @@ class DBHelper {
 
   static const requestId = 'request_id';
   static const response = 'response_body';
+  static const responseHeader = 'response_header';
 
   DBHelper._privateConstructor();
 
   static final DBHelper instance = DBHelper._privateConstructor();
 
   static Database? _database;
+
+  Map<int, String> migrationScripts = {
+    1: '''SELECT * FROM $responseTable''',
+    2: '''ALTER TABLE $responseTable ADD COLUMN $responseHeader TEXT''',
+  };
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -36,8 +43,20 @@ class DBHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        for (int i = oldVersion + 1; i <= newVersion; i++) {
+          try {
+            await db.execute(migrationScripts[i]!);
+          } catch (e) {
+            Fimber.d("error $e");
+          }
+        }
+      },
+    );
   }
 
   Future _onCreate(Database db, int version) async {
