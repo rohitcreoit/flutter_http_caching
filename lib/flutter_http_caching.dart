@@ -12,25 +12,42 @@ Future<Response> httpGet(Client client, String url,
     {header,
     body,
     List<InterceptorContract>? interceptor,
-    bool? isLogging}) async {
+    bool? isLogging,
+    bool? includeHeader,
+    List<String>? headersToCheck}) async {
   client = addInterceptor(isLogging, interceptor ?? [], client);
 
   bool result = await InternetConnectionChecker().hasConnection;
   var database = DBService();
 
   if (result) {
+    // add request data
     var reqId =
         await database.addRequest(type: "get", url: url, header: header);
 
     Response response = await client.get(Uri.parse(url), headers: header);
 
+    // add response data
     await database.addResponse(
-        type: 'get', url: url, body: response.body, requestId: reqId);
+      type: 'get',
+      url: url,
+      body: response.body,
+      requestId: reqId,
+      header: header,
+    );
     return response;
   } else {
     var responseRow = await database.getResponse(url);
     if (responseRow['response_body'] != null) {
-      return Response(responseRow['response_body'], 200);
+      if (includeHeader == true && headersToCheck?.isNotEmpty == true) {
+        if (headersToCheck?.contains(responseRow['response_header']) == false) {
+          return Response("Bad Response: header does not match", 400);
+        } else {
+          return Response(responseRow['response_body'], 200);
+        }
+      } else {
+        return Response(responseRow['response_body'], 200);
+      }
     } else {
       return Response("No Internet", 404);
     }
@@ -41,7 +58,9 @@ Future<Response> httpPut(Client client, String url,
     {header,
     body,
     List<InterceptorContract>? interceptor,
-    bool? isLogging}) async {
+    bool? isLogging,
+    bool? includeHeader,
+    List<String>? headersToCheck}) async {
   client = addInterceptor(isLogging, interceptor ?? [], client);
 
   bool result = await InternetConnectionChecker().hasConnection;
@@ -53,12 +72,21 @@ Future<Response> httpPut(Client client, String url,
       Uri.parse(url),
     );
 
-    await database.addResponse(type: 'put', url: url, body: response);
+    await database.addResponse(
+        type: 'put', url: url, body: response, header: header);
     return response;
   } else {
     var responseRow = await database.getResponse(url);
     if (responseRow['response_body'] != null) {
-      return Response(responseRow['response_body'], 200);
+      if (includeHeader == true && headersToCheck?.isNotEmpty == true) {
+        if (headersToCheck?.contains(responseRow['response_header']) == false) {
+          return Response("Bad Response: header does not match", 400);
+        } else {
+          return Response(responseRow['response_body'], 200);
+        }
+      } else {
+        return Response(responseRow['response_body'], 200);
+      }
     } else {
       return Response("No Internet", 404);
     }
@@ -69,7 +97,9 @@ Future<Response> httpPost(Client client, String url,
     {header,
     body,
     List<InterceptorContract>? interceptor,
-    bool? isLogging}) async {
+    bool? isLogging,
+    bool? includeHeader,
+    List<String>? headersToCheck}) async {
   client = addInterceptor(isLogging, interceptor ?? [], client);
   bool result = await InternetConnectionChecker().hasConnection;
   var database = DBService();
@@ -77,12 +107,21 @@ Future<Response> httpPost(Client client, String url,
   if (result) {
     await database.addRequest(type: "post", url: url, body: body);
     var response = client.post(Uri.parse(url), headers: header, body: body);
-    await database.addResponse(type: 'post', url: url, body: response);
+    await database.addResponse(
+        type: 'post', url: url, body: response, header: header);
     return response;
   } else {
     var responseRow = await database.getResponse(url);
     if (responseRow['response_body'] != null) {
-      return Response(responseRow['response_body'], 200);
+      if (includeHeader == true && headersToCheck?.isNotEmpty == true) {
+        if (headersToCheck?.contains(responseRow['response_header']) == false) {
+          return Response("Bad Response: header does not match", 400);
+        } else {
+          return Response(responseRow['response_body'], 200);
+        }
+      } else {
+        return Response(responseRow['response_body'], 200);
+      }
     } else {
       return Response("No Internet", 404);
     }
@@ -93,7 +132,9 @@ Future<Response> httpPatch(Client client, String url,
     {header,
     body,
     List<InterceptorContract>? interceptor,
-    bool? isLogging}) async {
+    bool? isLogging,
+    bool? includeHeader,
+    List<String>? headersToCheck}) async {
   client = addInterceptor(isLogging, interceptor ?? [], client);
   bool result = await InternetConnectionChecker().hasConnection;
   var database = DBService();
@@ -107,7 +148,15 @@ Future<Response> httpPatch(Client client, String url,
   } else {
     var responseRow = await database.getResponse(url);
     if (responseRow['response_body'] != null) {
-      return Response(responseRow['response_body'], 200);
+      if (includeHeader == true && headersToCheck?.isNotEmpty == true) {
+        if (headersToCheck?.contains(responseRow['response_header']) == false) {
+          return Response("Bad Response: header does not match", 400);
+        } else {
+          return Response(responseRow['response_body'], 200);
+        }
+      } else {
+        return Response(responseRow['response_body'], 200);
+      }
     } else {
       return Response("No Internet", 404);
     }
@@ -118,7 +167,9 @@ Future<Response> httpDelete(Client client, String url,
     {header,
     body,
     List<InterceptorContract>? interceptor,
-    bool? isLogging}) async {
+    bool? isLogging,
+    bool? includeHeader,
+    List<String>? headersToCheck}) async {
   client = addInterceptor(isLogging, interceptor ?? [], client);
   bool result = await InternetConnectionChecker().hasConnection;
   var database = DBService();
@@ -132,7 +183,15 @@ Future<Response> httpDelete(Client client, String url,
   } else {
     var responseRow = await database.getResponse(url);
     if (responseRow['response_body'] != null) {
-      return Response(responseRow['response_body'], 200);
+      if (includeHeader == true && headersToCheck?.isNotEmpty == true) {
+        if (headersToCheck?.contains(responseRow['response_header']) == false) {
+          return Response("Bad Response: header does not match", 400);
+        } else {
+          return Response(responseRow['response_body'], 200);
+        }
+      } else {
+        return Response(responseRow['response_body'], 200);
+      }
     } else {
       return Response("No Internet", 404);
     }
