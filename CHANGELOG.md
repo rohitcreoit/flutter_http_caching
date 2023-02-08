@@ -1,3 +1,4 @@
-## 0.0.5
+## 0.0.6
 
-* MIT LICENSE added
+* Updated for new dart version
+* added two new variable for header check
