@@ -83,7 +83,6 @@ class DBHelper {
             $url TEXT NOT NULL,
             $type TEXT NOT NULL,
             $response TEXT NOT NULL,
-            $responseHeader TEXT NOT NULL,
             FOREIGN KEY($requestId) REFERENCES $requestTable($id)
           )
           ''');
