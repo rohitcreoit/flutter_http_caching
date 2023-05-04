@@ -1,4 +1,3 @@
-## 0.0.6
+## 0.0.8
 
-* Updated for new dart version
-* added two new variable for header check
+* resolve database error
